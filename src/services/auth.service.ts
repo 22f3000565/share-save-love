@@ -5,13 +5,7 @@ const API_URL = 'http://localhost:8000';
 
 export const authService = {
     async register(userData: UserCreate): Promise<AuthResponse> {
-        const formattedUserData = {
-            ...userData,
-            user_type: userData.user_type.toLowerCase(),
-            dietary_preferences: userData.dietary_preferences || 'NO_PREFERENCE'
-        };
-
-        const response = await axios.post(`${API_URL}/auth/register`, formattedUserData);
+        const response = await axios.post(`${API_URL}/auth/register`, userData);
         if (response.data.access_token) {
             localStorage.setItem('token', response.data.access_token);
         }

@@ -87,7 +87,7 @@ const Landing = () => {
                       />
                     </>
                   )}
-                  <Input
+                  <IconInput
                     name="email"
                     type="email"
                     placeholder="Email"
@@ -96,7 +96,7 @@ const Landing = () => {
                     required
                     icon={<Mail className="h-4 w-4" />}
                   />
-                  <Input
+                  <IconInput
                     name="password"
                     type="password"
                     placeholder="Password"

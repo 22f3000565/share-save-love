@@ -1,10 +1,56 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Users, Leaf, Award, ArrowRight, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Heart, Users, Leaf, Award, ArrowRight, CheckCircle, Mail, Lock } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-food-sharing.jpg";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
+import { UserCreate } from "@/types/auth";
+import { toast } from "@/components/ui/use-toast";
 
 const Landing = () => {
+  const { isAuthenticated, login, register } = useAuth();
+  const navigate = useNavigate();
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    user_type: 'GENERAL' as const,
+    phone: ''
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (isLoginMode) {
+        await login({ email: formData.email, password: formData.password });
+      } else {
+        await register(formData as UserCreate);
+      }
+      navigate('/discover');
+      toast({
+        title: isLoginMode ? "Logged in successfully" : "Registered successfully",
+        description: "Welcome to FoodSaver!",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Authentication failed. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -21,31 +67,88 @@ const Landing = () => {
                 Join our community of food heroes. Connect with nearby restaurants, neighbors, 
                 and NGOs to save perfectly good food from going to waste.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/profile">
-                  <Button 
-                    size="lg" 
-                    className="rounded-full bg-gradient-to-r from-primary to-primary/90 hover:shadow-lg transition-all text-lg px-8"
+              {!isAuthenticated && (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {!isLoginMode && (
+                    <>
+                      <Input
+                        name="name"
+                        placeholder="Full Name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                      />
+                      <Input
+                        name="phone"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </>
+                  )}
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    icon={<Mail className="h-4 w-4" />}
+                  />
+                  <Input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    required
+                    icon={<Lock className="h-4 w-4" />}
+                  />
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full rounded-full bg-gradient-to-r from-primary to-primary/90 hover:shadow-lg transition-all text-lg"
                   >
-                    Join Now <ArrowRight className="ml-2 h-5 w-5" />
+                    {isLoginMode ? "Login" : "Register"}
                   </Button>
-                </Link>
-                <Link to="/discover">
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="rounded-full text-lg px-8"
+                  <Button
+                    type="button"
+                    variant="link"
+                    onClick={() => setIsLoginMode(!isLoginMode)}
+                    className="w-full"
                   >
-                    Discover Food
+                    {isLoginMode ? "Don't have an account? Register" : "Already have an account? Login"}
                   </Button>
-                </Link>
-              </div>
+                </form>
+              )}
+              {isAuthenticated && (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link to="/discover">
+                    <Button
+                      size="lg"
+                      className="rounded-full bg-gradient-to-r from-primary to-primary/90 hover:shadow-lg transition-all text-lg px-8"
+                    >
+                      Discover Food <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <Link to="/post-food">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="rounded-full text-lg px-8"
+                    >
+                      Share Food
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
             <div className="relative animate-fade-in">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-3xl"></div>
-              <img 
-                src={heroImage} 
-                alt="Community food sharing" 
+              <img
+                src={heroImage}
+                alt="Community food sharing"
                 className="relative rounded-3xl shadow-2xl w-full h-auto object-cover"
               />
             </div>

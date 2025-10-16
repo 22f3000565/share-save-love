@@ -1,11 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -23,14 +25,6 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <Link
-              to="/"
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive("/") ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              Home
-            </Link>
             <Link
               to="/discover"
               className={`text-sm font-medium transition-colors hover:text-primary ${
@@ -71,6 +65,15 @@ const Navbar = () => {
             >
               Community
             </Link>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={logout}
+              className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
           </div>
 
           {/* Desktop CTA */}
@@ -105,15 +108,6 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t animate-fade-in">
             <div className="flex flex-col gap-4">
-              <Link
-                to="/"
-                onClick={() => setIsMenuOpen(false)}
-                className={`text-sm font-medium transition-colors ${
-                  isActive("/") ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                Home
-              </Link>
               <Link
                 to="/discover"
                 onClick={() => setIsMenuOpen(false)}
@@ -170,6 +164,17 @@ const Navbar = () => {
                     Share Food
                   </Button>
                 </Link>
+                <Button 
+                  variant="ghost"
+                  onClick={() => {
+                    logout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full rounded-full flex items-center justify-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
               </div>
             </div>
           </div>

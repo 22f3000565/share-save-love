@@ -18,12 +18,7 @@ const Landing = () => {
     email: '',
     password: '',
     name: '',
-    user_type: 'general' as const,
-    phone: '',
-    latitude: 0,
-    longitude: 0,
-    address: '',
-    dietary_preferences: 'no_preference' as const
+    user_type: 'general' as const
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,30 +42,6 @@ const Landing = () => {
       });
     }
   };
-
-  useEffect(() => {
-    if (!isLoginMode) {
-      // Get user's location
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setFormData(prev => ({
-              ...prev,
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            }));
-          },
-          (error) => {
-            toast({
-              title: "Location Error",
-              description: "Unable to get your location. Please enter your address manually.",
-              variant: "destructive"
-            });
-          }
-        );
-      }
-    }
-  }, [isLoginMode]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -98,54 +69,13 @@ const Landing = () => {
               {!isAuthenticated && (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {!isLoginMode && (
-                    <>
-                      <Input
-                        name="name"
-                        placeholder="Full Name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <Input
-                        name="phone"
-                        placeholder="Phone Number"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <IconInput
-                        name="address"
-                        placeholder="Address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        required
-                        icon={<MapPin className="h-4 w-4" />}
-                      />
-                      <div className="grid grid-cols-2 gap-4">
-                        <Input
-                          name="latitude"
-                          type="number"
-                          placeholder="Latitude"
-                          value={formData.latitude}
-                          onChange={handleInputChange}
-                          required
-                          min="-90"
-                          max="90"
-                          step="0.000001"
-                        />
-                        <Input
-                          name="longitude"
-                          type="number"
-                          placeholder="Longitude"
-                          value={formData.longitude}
-                          onChange={handleInputChange}
-                          required
-                          min="-180"
-                          max="180"
-                          step="0.000001"
-                        />
-                      </div>
-                    </>
+                    <Input
+                      name="name"
+                      placeholder="Full Name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                    />
                   )}
                   <IconInput
                     name="email"

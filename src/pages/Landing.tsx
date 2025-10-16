@@ -147,7 +147,7 @@ const Landing = () => {
                       </div>
                     </>
                   )}
-                  <IconInput
+                  <Input
                     name="email"
                     type="email"
                     placeholder="Email"
@@ -156,7 +156,7 @@ const Landing = () => {
                     required
                     icon={<Mail className="h-4 w-4" />}
                   />
-                  <IconInput
+                  <Input
                     name="password"
                     type="password"
                     placeholder="Password"

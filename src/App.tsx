@@ -9,6 +9,8 @@ import Profile from "./pages/Profile";
 import PostFood from "./pages/PostFood";
 import Discover from "./pages/Discover";
 import Orders from "./pages/Orders";
+import Rewards from "./pages/Rewards";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ const App = () => (
             <Route path="/post-food" element={<PostFood />} />
             <Route path="/discover" element={<Discover />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/community" element={<Community />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

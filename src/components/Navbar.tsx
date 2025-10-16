@@ -55,6 +55,22 @@ const Navbar = () => {
             >
               My Orders
             </Link>
+            <Link
+              to="/rewards"
+              className={`text-sm font-medium transition-colors hover:text-primary ${
+                isActive("/rewards") ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              Rewards
+            </Link>
+            <Link
+              to="/community"
+              className={`text-sm font-medium transition-colors hover:text-primary ${
+                isActive("/community") ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              Community
+            </Link>
           </div>
 
           {/* Desktop CTA */}
@@ -124,6 +140,24 @@ const Navbar = () => {
                 }`}
               >
                 My Orders
+              </Link>
+              <Link
+                to="/rewards"
+                onClick={() => setIsMenuOpen(false)}
+                className={`text-sm font-medium transition-colors ${
+                  isActive("/rewards") ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                Rewards
+              </Link>
+              <Link
+                to="/community"
+                onClick={() => setIsMenuOpen(false)}
+                className={`text-sm font-medium transition-colors ${
+                  isActive("/community") ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                Community
               </Link>
               <div className="flex flex-col gap-2 pt-2 border-t">
                 <Link to="/profile" onClick={() => setIsMenuOpen(false)}>

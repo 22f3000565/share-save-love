@@ -18,6 +18,7 @@ const mockFoodItems = [
     donor: "Green Leaf Restaurant",
     distance: "0.5 km away",
     status: "available",
+    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400",
   },
   {
     id: 2,
@@ -29,6 +30,7 @@ const mockFoodItems = [
     donor: "Sweet Dreams Bakery",
     distance: "1.2 km away",
     status: "available",
+    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400",
   },
   {
     id: 3,
@@ -40,6 +42,7 @@ const mockFoodItems = [
     donor: "Community Garden",
     distance: "2.0 km away",
     status: "available",
+    image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=400",
   },
   {
     id: 4,
@@ -51,6 +54,7 @@ const mockFoodItems = [
     donor: "Food Hub NGO",
     distance: "0.8 km away",
     status: "available",
+    image: null,
   },
 ];
 
@@ -110,6 +114,15 @@ const Discover = () => {
                     isClaimed ? "opacity-60" : ""
                   }`}
                 >
+                  {item.image && (
+                    <div className="aspect-video w-full overflow-hidden rounded-t-lg">
+                      <img
+                        src={item.image}
+                        alt={item.foodType}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <CardHeader>
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">

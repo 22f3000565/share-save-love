@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Clock, Package } from "lucide-react";
+import { MapPin, Clock, Package, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -17,7 +17,30 @@ const PostFood = () => {
     pickupTime: "",
     description: "",
   });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const navigate = useNavigate();
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImagePreview(null);
+    setImageFile(null);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,17 +165,55 @@ const PostFood = () => {
                   />
                 </div>
 
-                {/* Image Upload Info */}
-                <Card className="bg-muted/50 border">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-3">
-                      <div className="text-sm text-muted-foreground">
-                        <strong>Tip:</strong> Adding a photo helps people see what you're offering. 
-                        You can add this feature later for a better experience!
+                {/* Image Upload */}
+                <div className="space-y-2">
+                  <Label htmlFor="foodImage">Food Image (Optional)</Label>
+                  <div className="border-2 border-dashed rounded-lg p-6 text-center hover:border-primary transition-colors">
+                    {!imagePreview ? (
+                      <>
+                        <input
+                          type="file"
+                          id="foodImage"
+                          accept="image/jpeg,image/png,image/jpg"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <label
+                          htmlFor="foodImage"
+                          className="flex flex-col items-center gap-2 cursor-pointer"
+                        >
+                          <Upload className="h-10 w-10 text-muted-foreground" />
+                          <div>
+                            <p className="text-sm font-medium">Click to upload image</p>
+                            <p className="text-xs text-muted-foreground">
+                              JPG, PNG up to 5MB
+                            </p>
+                          </div>
+                        </label>
+                      </>
+                    ) : (
+                      <div className="relative">
+                        <img
+                          src={imagePreview}
+                          alt="Food preview"
+                          className="max-h-64 mx-auto rounded-lg object-cover"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 rounded-full"
+                          onClick={removeImage}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Adding a photo helps receivers see what you're offering
+                  </p>
+                </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-4 pt-4">

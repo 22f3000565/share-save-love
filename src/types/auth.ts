@@ -2,12 +2,12 @@ export interface UserCreate {
     email: string;
     password: string;
     name: string;
-    user_type: 'GENERAL' | 'RESTAURANT' | 'NGO';
+    user_type: 'general' | 'restaurant' | 'ngo';
     phone: string;
-    latitude?: number;
-    longitude?: number;
-    address?: string;
-    dietary_preferences?: string[];
+    latitude: number;
+    longitude: number;
+    address: string;
+    dietary_preferences?: 'vegetarian' | 'vegan' | 'non_vegetarian' | 'halal' | 'jain' | 'no_preference';
     restaurant_name?: string;
     contact_person?: string;
     organization_name?: string;
